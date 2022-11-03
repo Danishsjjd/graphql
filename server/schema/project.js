@@ -6,8 +6,10 @@ const {
   GraphQLList,
 } = require("graphql");
 
-const { projects: projectData, clients: clientData } = require("../sampleData");
 const { clientType } = require("./client");
+
+const Projects = require("../model/project");
+const Clients = require("../model/client");
 
 const projectType = new GraphQLObjectType({
   name: "projectType",
@@ -18,21 +20,19 @@ const projectType = new GraphQLObjectType({
     status: { type: new GraphQLNonNull(GraphQLString) },
     client: {
       type: clientType,
-      resolve: (par) =>
-        clientData.find((singleClient) => singleClient.id === par.clientId),
+      resolve: (par) => Clients.findById(par.clientId),
     },
   },
 });
 
 const projects = {
   type: new GraphQLList(projectType),
-  resolve: () => projectData,
+  resolve: () => Projects.find(),
 };
 const project = {
   type: projectType,
   args: { id: { type: GraphQLID } },
-  resolve: (par, args) =>
-    projectData.find((singleProject) => singleProject.id === args.id),
+  resolve: (par, args) => Projects.findById(args.id),
 };
 
 module.exports = { projects, project };

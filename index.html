@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GraphQL</title>
+  </head>
+  <body>
+    <h1>Here we go graphql</h1>
+    <script>
+      fetch("http://localhost:5000/graphql", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          query: `
+          query getClient($id:ID!){
+            client(id:$id){
+              name
+              id
+              email
+            }
+          }
+`,
+          variables: { id: "63639b60b75548d8184a03f4" },
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    </script>
+  </body>
+</html>
